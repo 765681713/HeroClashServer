@@ -1,0 +1,17 @@
+extends layout
+
+style.
+    a{
+        margin-left:20px;
+        text-decoration: none;
+    }
+    a:hover{
+        text-decoration: underline;
+    }
+
+block content
+  h1= title
+  p Welcome to #{title}
+  p
+     a(href="") 登录
+     a(href="/user/add") 添加用户

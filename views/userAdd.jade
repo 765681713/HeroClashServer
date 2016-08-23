@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1= title
+    div.container
+        form(role="form",method="post" action="/user/add")
+            p UserName:
+                input(type="text",name="username")
+            p UserPassword:
+                input(type="password",name="userpwd")
+            input.col-lg-4.btn.btn-primary.btn-block(type="submit",value="submit")
+        div.col-lg-4
