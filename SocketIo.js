@@ -8,22 +8,52 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var databasePath = 'public/database/HeroClash.sqlite3';
 module.exports = function (server, app) {
-    var socketIo = sockIo.listen(server , null);
+    var socketIo = sockIo.listen(server, null);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
     app.use(logger('dev'));
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
     app.use('/', routes);
     var db = new sqlite3.Database(databasePath);
-    db.run("create table if not exists Note (cdate text primary key ,content text)");
+    db.run("create table if not exists User (cdate text primary key ,username text,userpwd text)");
     db.close();
-    
-    socketIo.on('connection',function (socket) {
-        console.log('  connection HeroClash ing .... ');
 
+    socketIo.on('connection', function (socket) {
+        console.log('  connection HeroClash ing .... ');
+        socket.send(" hehehe  dadada ");
+        socket.on("getUserInfo", function (data) {
+            console.log('  getUserInfo  data =  ' + data);
+            var json = JSON.parse(data);
+            var db = new sqlite3.Database(databasePath);
+            var cdate = json.cdate; //json    json[""] 数组 json.content  jsonObject
+            var username = json.username;
+            var userpwd = json.userpwd;
+            console.log('  getUserInfo  userpwd =  ' + userpwd  + " username = " + username);
+            db.run("select * from User where username = ? ", [username], function (err, user) {
+                if (err) {
+                    console.warn(" err  no exit this user");
+                    socket.emit('getUserInfo', {
+                        code: -1
+                    });
+                }
+                if (user) {
+                    console.warn(" exit this user");
+                    socket.emit('getUserInfo', {
+                        code: 0,
+                        data: user
+                    });
+                } else {
+                    console.warn(" no exit this user");
+                    socket.emit('getUserInfo', {
+                        code: 0,
+                        data: null
+                    });
+                }
+            });
+        });
 
 
         // socket.on('findAll', function (data) {
@@ -75,6 +105,9 @@ module.exports = function (server, app) {
         //         ResultCode: 0
         //     });
         // });
+        socket.on('disconnect', function(){
+            console.log('  HeroClash disconnect ');
+        });
     });
 
     app.use(function (req, res, next) {

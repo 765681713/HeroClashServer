@@ -1,17 +1,42 @@
 extends layout
 
-style.
-    a{
-        margin-left:20px;
-        text-decoration: none;
-    }
-    a:hover{
-        text-decoration: underline;
-    }
-
 block content
-  h1= title
-  p Welcome to #{title}
-  p
-     a(href="") 登录
-     a(href="/user/add") 添加用户
+    div.container
+        div.header.clearfix
+            nav
+                ul.nav.nav-pills.pull-right
+                    li.active(role="presentation")
+                        a(href="#") Home
+                    li(role="presentation")
+                        a(href="#") About
+                    li(role="presentation")
+                        a(href="/background") Background
+            h3.text-muted Project Name
+        div.jumbotron
+            h1 Hero Clash Server
+            p.lead hero clash server 2016-08-23
+            p
+                a.btn.btn-lg.btn-success(href="#",role="button") Sign Up
+        div.row.marketing
+            div.col-lg-6
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+            div.col-lg-6
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+                h4 BingYanDeXuanLv
+                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+        footer.footer
+            p BingYanDeXuanLv 2016-08-23
+
+
