@@ -1,5 +1,4 @@
 extends layout
-
 block content
     div.container
         div.header.clearfix
@@ -11,32 +10,43 @@ block content
                         a(href="#") About
                     li(role="presentation")
                         a(href="/background") Background
-            h3.text-muted Project Name
+            h3.text-muted Hero Clash
         div.jumbotron
             h1 Hero Clash Server
-            p.lead hero clash server 2016-08-23
+            p#timep.lead hero clash server
             p
-                a.btn.btn-lg.btn-success(href="#",role="button") Sign Up
+            - if(user){
+                p #{user.username}
+            - }else{
+                a.btn.btn-lg.btn-success(href="#",role="button",data-toggle="modal",data-target="#loginModal") Sign Up
+            - }
         div.row.marketing
-            div.col-lg-6
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-            div.col-lg-6
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
-                h4 BingYanDeXuanLv
-                p bing yan de xuan lv mei you shen me bu ke yi de nu li jiu xing
+            each hero in heroes
+                div.col-lg-6
+                    img.col-lg-3(src="/images/#{hero.icon}",style="margin:5px")
+                    div.col-lg-8
+                        h4
+                            a(href="#") #{hero.title}
+                        p #{hero.desc}
+        div.modal.fade#loginModal(tabindex="-1",role="dialog",aria-labelledby="loginModalLabel",aria-hidden="true")
+            div.modal-dialog
+                div.modal-content
+                    form.form-horizontal(action="/loginUp",method="post")
+                        div.modal-header
+                            button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+                            h4.modal-title#loginModalLabel 登录窗口
+                        div.modal-body
+                            div.form-group
+                                label.col-sm-2.text-center 用户名
+                                div.col-sm-10
+                                    input.form-control#userName(type="text",name="userName",placeholder="请输入")
+                            div.form-group
+                                label.col-sm-2.text-center 密码
+                                div.col-sm-10
+                                    input.form-control#userPwd(type="text",name="userPwd",placeholder="请输入")
+                        div.modal-footer
+                            button.btn.btn-default(data-dismiss="modal") 关闭
+                            button.btn.btn-primary(type="submit") 登录
         footer.footer
             p BingYanDeXuanLv 2016-08-23
-
-
+        script(src='/javascripts/indexScript.js')

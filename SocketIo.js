@@ -6,7 +6,9 @@ var fs = require('fs');
 var routes = require('./routes/index.js');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
+var MongoStore = require('connect-mongo')(session);
 var User = require('./bean/User').User;
 var UserInfo = require('./bean/UserInfo').UserInfo;
 var Result = require('./bean/Result');
@@ -22,6 +24,18 @@ module.exports = function (server, app) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
+    app.use(session({
+        secret:'heroClash',
+        cookie:{maxAge:80000},
+        resave:false,
+        saveUninitialized:true,
+        store: new MongoStore({   //创建新的mongodb数据库
+            url:"mongodb://localhost:27017/HeroClash"
+            /*db: settings.db,
+             host: settings.host,
+             port: settings.port*///老版不用了
+        })
+    }));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use('/', routes);
 

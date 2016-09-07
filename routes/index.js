@@ -3,12 +3,10 @@ var router = express.Router();
 var User = require('../bean/User').User;
 var Result = require('../bean/Result');
 var crypto = require('crypto');
+var HeroInfoList = require('../public/json/HeroInfoList.json');
+var fs = require('fs');
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', {});
-});
-
+//app
 router.post('/login', function (req, res) {
     var username = req.body.username;
     var pwd = req.body.userpwd;
@@ -53,6 +51,60 @@ router.post('/login', function (req, res) {
                 });
             }
         });
+    }
+});
+
+//浏览器
+router.get('/', function (req, res, next) {
+    var heroes = [];
+    var i = 0;
+    while (true){
+        var id = 2001 + i;
+        var json = HeroInfoList[id];
+        if(json){//&& json !== undefined && json !== ""
+            heroes.push(json);
+            i++;
+        }else{
+            break;
+        }
+    }
+    res.render('index', {
+        heroes:heroes,
+        user:req.session.user
+    });
+});
+
+router.post('/loginUp',function (req,res) {
+    var userName = req.body.userName;
+    var pwd = req.body.userPwd;
+    if (userName && pwd) {
+        User.findByName(userName,function (err,user) {
+            if(err){
+                console.warn("err = " + err);
+                res.redirect('/');
+                return;
+            }
+            if(user){
+                var userPwd = crypto.createHash("md5").update(pwd).digest("hex");
+                User.findOne({username: userName, userpwd: userPwd}, function (err, user) {
+                    if(err){
+                        console.warn("err = " + err);
+                        res.redirect('/');
+                        return;
+                    }
+                    if(user){
+                        req.session.user = user;
+                        res.redirect('/');
+                    }else{
+                        res.redirect('/');
+                    }
+                });
+            }else{
+                res.redirect('/');
+            }
+        });
+    }else{
+        res.redirect('/');
     }
 });
 
