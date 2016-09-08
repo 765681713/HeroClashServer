@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../bean/User').User;
+var UserInfo = require('../bean/UserInfo').UserInfo;
 var Result = require('../bean/Result');
 var crypto = require('crypto');
 var HeroInfoList = require('../public/json/HeroInfoList.json');
@@ -68,10 +69,23 @@ router.get('/', function (req, res, next) {
             break;
         }
     }
-    res.render('index', {
-        heroes:heroes,
-        user:req.session.user
-    });
+    if(req.session.user){
+        UserInfo.findById(req.session.user._id,function (err,ui) {
+            if(err){
+                console.warn("UserInfo.findOne = " + err);
+            }
+            console.warn(ui);
+            res.render('index', {
+                heroes:heroes,
+                user:req.session.user,
+                userInfo:ui
+            });
+        });
+    }else{
+        res.render('index', {
+            heroes:heroes
+        });
+    }
 });
 
 router.post('/loginUp',function (req,res) {
@@ -92,12 +106,8 @@ router.post('/loginUp',function (req,res) {
                         res.redirect('/');
                         return;
                     }
-                    if(user){
-                        req.session.user = user;
-                        res.redirect('/');
-                    }else{
-                        res.redirect('/');
-                    }
+                    req.session.user = user;
+                    res.redirect('/');
                 });
             }else{
                 res.redirect('/');

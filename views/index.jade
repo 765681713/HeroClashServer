@@ -4,49 +4,97 @@ block content
         div.header.clearfix
             nav
                 ul.nav.nav-pills.pull-right
-                    li.active(role="presentation")
+                    li.active#home(role="presentation")
                         a(href="#") Home
-                    li(role="presentation")
-                        a(href="#") About
+                    - if(user){
+                        li#about(role="presentation")
+                            a(href="#") About
+                    -}else{
+                        li(role="presentation")
+                            a(href="#",data-toggle="modal",data-target="#loginModal") About
+                    -}
                     li(role="presentation")
                         a(href="/background") Background
             h3.text-muted Hero Clash
-        div.jumbotron
-            h1 Hero Clash Server
-            p#timep.lead hero clash server
-            p
-            - if(user){
-                p #{user.username}
-            - }else{
-                a.btn.btn-lg.btn-success(href="#",role="button",data-toggle="modal",data-target="#loginModal") Sign Up
-            - }
-        div.row.marketing
-            each hero in heroes
-                div.col-lg-6
-                    img.col-lg-3(src="/images/#{hero.icon}",style="margin:5px")
-                    div.col-lg-8
-                        h4
-                            a(href="#") #{hero.title}
-                        p #{hero.desc}
-        div.modal.fade#loginModal(tabindex="-1",role="dialog",aria-labelledby="loginModalLabel",aria-hidden="true")
-            div.modal-dialog
-                div.modal-content
-                    form.form-horizontal(action="/loginUp",method="post")
-                        div.modal-header
-                            button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
-                            h4.modal-title#loginModalLabel 登录窗口
-                        div.modal-body
-                            div.form-group
-                                label.col-sm-2.text-center 用户名
-                                div.col-sm-10
-                                    input.form-control#userName(type="text",name="userName",placeholder="请输入")
-                            div.form-group
-                                label.col-sm-2.text-center 密码
-                                div.col-sm-10
-                                    input.form-control#userPwd(type="text",name="userPwd",placeholder="请输入")
-                        div.modal-footer
-                            button.btn.btn-default(data-dismiss="modal") 关闭
-                            button.btn.btn-primary(type="submit") 登录
+        div.container#HomePage
+            div.jumbotron
+                h1 Hero Clash Server
+                p#timep.lead hero clash server
+                p
+                - if(user){
+                    p #{user.username}
+                - }else{
+                    a.btn.btn-lg.btn-success(href="#",role="button",data-toggle="modal",data-target="#loginModal") Sign Up
+                - }
+            div.row.marketing
+                each hero in heroes
+                    div.col-lg-6
+                        img.col-lg-3(src="/images/#{hero.icon}",style="margin:5px")
+                        div.col-lg-8
+                            h4
+                                a(href="#") #{hero.title}
+                            p #{hero.desc}
+            div.modal.fade#loginModal(tabindex="-1",role="dialog",aria-labelledby="loginModalLabel",aria-hidden="true")
+                div.modal-dialog
+                    div.modal-content
+                        form.form-horizontal(action="/loginUp",method="post")
+                            div.modal-header
+                                button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+                                h4.modal-title#loginModalLabel 登录窗口
+                            div.modal-body
+                                div.form-group
+                                    label.col-sm-2.text-center 用户名
+                                    div.col-sm-10
+                                        input.form-control#userName(type="text",name="userName",placeholder="请输入")
+                                div.form-group
+                                    label.col-sm-2.text-center 密码
+                                    div.col-sm-10
+                                        input.form-control#userPwd(type="text",name="userPwd",placeholder="请输入")
+                            div.modal-footer
+                                button.btn.btn-default(data-dismiss="modal") 关闭
+                                button.btn.btn-primary(type="submit") 登录
+
+        div.container#AboutPage
+            div.panel.panel-info
+                -console.warn(userInfo);
+                -if(userInfo && user){
+                    div.panel-heading
+                        h4 #{userInfo.name}
+                    div.panel-body
+                        span
+                            img.col-md-3(src="/images/#{userInfo.icon}",style='margin:5px')
+                        div.col-md-8.center
+                            div.page-header
+                                h2.text-success #{userInfo.name}
+                                    small &nbsp;&nbsp;LV : #{userInfo.level}
+                        div.col-md-8
+                            p exp &nbsp; : &nbsp; #{userInfo.expNow}/#{userInfo.expNed}
+                            p HP &nbsp;:&nbsp; #{userInfo.hp}&nbsp;&nbsp; MP &nbsp;:&nbsp; #{userInfo.mp}&nbsp;&nbsp; DEF &nbsp;:&nbsp; #{userInfo.def}&nbsp;&nbsp;
+                        div.col-md-12
+                            span
+                                img.col-sm-1(src="/images/glod_icon.png")
+                                h6.col-sm-11 #{userInfo.glodNum}
+                            span
+                                img.col-sm-1(src="/images/zuanshi.png")
+                                h6.col-sm-11 #{userInfo.zuanShiNum}
+                            span
+                                img.col-sm-1(src="/images/tili_icon.png")
+                                h6.col-sm-11 #{userInfo.tiLiNum}/ #{userInfo.tiLiNumCount}
+                            p 行动次数 &nbsp;:&nbsp; #{userInfo.act}
+                            p 英雄数 &nbsp;:&nbsp; #{userInfo.heroesCount}
+
+                -}
+            div.panel.panel-success
+                div.panel-heading
+                    h4 英雄列表
+                div.panel-body
+
+            div.panel.panel-primary
+                div.panel-heading
+                    h4 物品列表
+                div.panel-body
+
         footer.footer
             p BingYanDeXuanLv 2016-08-23
-        script(src='/javascripts/indexScript.js')
+        //script(src='/javascripts/indexScript.js')
+
