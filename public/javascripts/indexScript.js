@@ -32,7 +32,9 @@ $(function () {
         months = months + 1;
         $("#timep").text(" " + years + "年" + months + "月" + d + "日 " + h + ":" + m + ":" + s);
     }
+
     startTimes();
     setInterval(startTimes,1000);
-    
+
+
 });

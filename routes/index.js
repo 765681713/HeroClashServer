@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var User = require('../bean/User').User;
 var UserInfo = require('../bean/UserInfo').UserInfo;
+var HeroList = require('../bean/HeroList').HeroList;
+var WuPinList = require('../bean/WuPinList').WuPinList;
 var Result = require('../bean/Result');
 var crypto = require('crypto');
 var HeroInfoList = require('../public/json/HeroInfoList.json');
@@ -74,12 +76,30 @@ router.get('/', function (req, res, next) {
             if(err){
                 console.warn("UserInfo.findOne = " + err);
             }
-            console.warn(ui);
-            res.render('index', {
-                heroes:heroes,
-                user:req.session.user,
-                userInfo:ui
-            });
+            if(ui){
+                HeroList.findHeroesByUserId(ui._fk,function (err , uHeroes) {
+                    if(err){
+                        console.warn("HeroList.findHeroesByUserId = " + err);
+                    }
+                    WuPinList.findWuPinsByUserId(ui._fk,function (err , wuPins) {
+                        if(err){
+                            console.warn("WuPinList.findWuPinsByUserId = " + err);
+                        }
+                        res.render('index', {
+                            heroes:heroes,
+                            user:req.session.user,
+                            userInfo:ui,
+                            uHeroes:uHeroes,
+                            uWuPins: wuPins
+                        });
+                    })
+                })
+            }else{
+                res.render('index', {
+                    heroes:heroes,
+                    user:req.session.user
+                });
+            }
         });
     }else{
         res.render('index', {
@@ -118,9 +138,18 @@ router.post('/loginUp',function (req,res) {
     }
 });
 
-router.get('/background', function (req, res) {
+// router.get('/heroList/:id',function (req, res) {
+//     var heroId = req.param.id;
+//     var heroInfo = HeroInfoList[heroId];
+//    
+// });
 
-    res.render('background', {title: 'Background'});
+router.get('/background', function (req, res) {
+    if(req.session.user){
+        res.render('background', {title: 'Background'});
+    }else{
+        res.redirect('/');
+    }
 });
 
 module.exports = router;

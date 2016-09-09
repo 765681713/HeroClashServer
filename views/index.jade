@@ -26,14 +26,23 @@ block content
                 - }else{
                     a.btn.btn-lg.btn-success(href="#",role="button",data-toggle="modal",data-target="#loginModal") Sign Up
                 - }
-            div.row.marketing
+            div.row.marketing#heroInfoList
                 each hero in heroes
                     div.col-lg-6
                         img.col-lg-3(src="/images/#{hero.icon}",style="margin:5px")
                         div.col-lg-8
                             h4
-                                a(href="#") #{hero.title}
+                                a(href="javascript:void(0)") #{hero.title}
                             p #{hero.desc}
+            div.modal.fade#heroInfoModal(tabindex="-1",role="dialog",aria-hidden="true")
+                div.modal-dialog
+                    div.modal-content
+                        div.modal-header
+                            p 123
+                        div.modal-body
+                            p 234
+                        div.modal-footer
+                            p 345
             div.modal.fade#loginModal(tabindex="-1",role="dialog",aria-labelledby="loginModalLabel",aria-hidden="true")
                 div.modal-dialog
                     div.modal-content
@@ -56,7 +65,6 @@ block content
 
         div.container#AboutPage
             div.panel.panel-info
-                -console.warn(userInfo);
                 -if(userInfo && user){
                     div.panel-heading
                         h4 #{userInfo.name}
@@ -88,13 +96,33 @@ block content
                 div.panel-heading
                     h4 英雄列表
                 div.panel-body
-
+                    -if(uHeroes){
+                        each uHero in uHeroes
+                            div.col-sm-8.col-md-4
+                                div.thumbnail
+                                    img(src="/images/#{uHero.icon}")
+                                    div.caption
+                                        h4.text-center  #{uHero.title}
+                                        p #{uHero.desc}
+                     -}
             div.panel.panel-primary
                 div.panel-heading
                     h4 物品列表
                 div.panel-body
-
+                    -if(uWuPins){
+                        each wuPin in uWuPins
+                            div.col-sm-4.col-md-2
+                                div.thumbnail
+                                    img(src="/images/#{wuPin.icon}")
+                                    div.caption
+                                        h4.text-center #{wuPin.title}
+                                        p #{wuPin.desc}
+                    -}
         footer.footer
             p BingYanDeXuanLv 2016-08-23
-        //script(src='/javascripts/indexScript.js')
+        script.
+            function onClickHeroInfo(e) {
+                alert(e);
+                return false;
+            }
 
